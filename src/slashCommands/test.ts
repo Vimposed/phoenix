@@ -1,6 +1,6 @@
 import { Phoenix, SlashCommand } from "@structs/index";
 import { sendEmbed } from "@types";
-import { BaseCommandInteraction } from 'discord.js';
+import { BaseCommandInteraction, MessageEmbed } from 'discord.js';
 
 export default class TestCommand extends SlashCommand {
   constructor(client: Phoenix) {
@@ -14,15 +14,11 @@ export default class TestCommand extends SlashCommand {
     });
   }
 
-  public async run(client: Phoenix, interaction: BaseCommandInteraction): Promise<boolean> {
-    sendEmbed({
-      embed: {
-        description: "Testing",
-        color: "#000000",
-      },
-      hidden: true,
-      interaction
-    });
-    return true;
+  public async run(client: Phoenix, interaction: BaseCommandInteraction): Promise<void> {
+    const embed = new MessageEmbed()
+    .setTitle("About me")
+    .setDescription("Hello my name is Pheonix.");
+    
+    interaction.reply({ embeds: [embed] })
   }
 }

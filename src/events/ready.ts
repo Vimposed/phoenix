@@ -3,9 +3,7 @@ import { Phoenix } from "@structs/Client";
 exports.run = async function (client: Phoenix) {
   client.logger("info", "client", `Pheonix is online and ready, connected to ${client.guilds.cache.size} guil${client.guilds.cache.size <= 2 ? "d" : "ds"}`);
 
-  const cmds = client.commands.map(c => c);
-
-  console.log(cmds);
+  const cmds = client.slashCommands.map(c => c);
 
   client.application!.commands
     .set(cmds)

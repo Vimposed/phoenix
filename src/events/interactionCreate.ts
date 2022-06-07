@@ -3,7 +3,7 @@ import { BaseCommandInteraction } from "discord.js";
 
 exports.run = async function (client: Phoenix, interaction: BaseCommandInteraction) {
   if (interaction.isCommand()) {
-    const slashCommand = client.commands.find(c => c.name === interaction.commandName);
+    const slashCommand = client.slashCommands.find(c => c.name === interaction.commandName);
 
     if (!slashCommand) {
       await interaction.reply({
@@ -14,6 +14,6 @@ exports.run = async function (client: Phoenix, interaction: BaseCommandInteracti
       return false;
     }
 
-    slashCommand.run(client, interaction);
+    slashCommand.run(client, (interaction as any));
   }
 }

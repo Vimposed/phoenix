@@ -6,9 +6,8 @@ COPY pnpm-lock.yaml ./
 
 COPY . ./
 
-RUN pnpm i -P \
-&& pnpm run build
-
-EXPOSE 4000
+RUN pnpm i \
+&& pnpm run build \
+pnpm i -P
 
 CMD ["pnpm", "start"]

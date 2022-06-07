@@ -1,13 +1,14 @@
-import { owners, Phoenix } from "./structs";
+import { owners, prefix, Phoenix } from "./structs";
 
 const client = new Phoenix({
-  owners, token: process.env.TOKEN
+  owners, prefix, token: process.env.TOKEN as string
 });
 
 client.init();
 
 const main = async () => {
   await client.loadCommands(__dirname + "/commands");
+  await client.loadSlashCommands(__dirname + "/slashCommands");
   await client.loadEvents(__dirname + "/events");
 }
 
