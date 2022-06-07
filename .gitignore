@@ -1,0 +1,12 @@
+dist
+node_modules
+
+.env
+.idea
+.vscode
+
+dump.rdb
+.yarn
+.yarnrc
+
+# pnpm-lock.yaml is kept for a reason
