@@ -1,7 +1,7 @@
 import { Role } from "@prisma/client";
 
 import client from "../index";
-import { Phoenix } from "@structs/index";
+import { Phoenix } from "./index";
 import { Commands } from "@types";
 import { Message, PermissionString } from "discord.js";
 

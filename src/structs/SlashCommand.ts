@@ -8,7 +8,7 @@ import {
 import { Role } from "@prisma/client";
 
 import client from "../index";
-import { Phoenix } from "@structs/index";
+import { Phoenix } from "./index";
 import { SlashCommands } from "@types";
 
 export abstract class SlashCommand implements SlashCommands {
