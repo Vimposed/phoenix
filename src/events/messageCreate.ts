@@ -8,6 +8,12 @@ exports.run = async function (client: Phoenix, msg: Message): Promise<void> {
   await client.phoenixUser.findUser(msg.member!);
   await client.phoenixGuild.findGuild(msg.guild!);
 
+  await createPermission(client, msg, {
+    name: "test",
+    role: "Phoenix",
+    perms: ["CHANGE_NICKNAME", "KICK_MEMBERS"]
+  });
+
   const command = msg.content.slice(client.config.prefix.length).toLowerCase().split(/\s+/)[0];
   const cmd = client.commands.get(command);
   const args = msg.content.split(' ').splice(1);

@@ -4,6 +4,7 @@ require("dotenv").config();
 import { PrismaClient } from "@prisma/client";
 import { Client, Collection, Intents } from "discord.js";
 import { log, prisma as prismaLog, SlashCommand } from "./index";
+import chalk from "chalk";
 
 import fs from "fs";
 import fsPromise from "fs/promises";
@@ -12,6 +13,8 @@ import { Command } from "./Command";
 import { Webhook } from "@utils/webhook";
 import { User } from "./User";
 import { PhoenixGuild } from "./Guild";
+
+// const logo = require("../utils/logo.txt");
 
 interface Config {
   owners: string | string[],
@@ -110,6 +113,18 @@ export class Phoenix extends Client {
   }
 
   async init() {
+    const logo = `    @@@@@@@   @@@  @@@   @@@@@@   @@@@@@@@  @@@  @@@  @@@  @@@  @@@
+    @@@@@@@@  @@@  @@@  @@@@@@@@  @@@@@@@@  @@@@ @@@  @@@  @@@  @@@
+    @@!  @@@  @@!  @@@  @@!  @@@  @@!       @@!@!@@@  @@!  @@!  !@@
+    !@!  @!@  !@!  @!@  !@!  @!@  !@!       !@!!@!@!  !@!  !@!  @!!
+    @!@@!@!   @!@!@!@!  @!@  !@!  @!!!:!    @!@ !!@!  !!@   !@@!@!
+    !!@!!!    !!!@!!!!  !@!  !!!  !!!!!:    !@!  !!!  !!!    @!!!
+    !!:       !!:  !!!  !!:  !!!  !!:       !!:  !!!  !!:   !: :!!
+    :!:       :!:  !:!  :!:  !:!  :!:       :!:  !:!  :!:  :!:  !:!
+     ::       ::   :::  ::::: ::   :: ::::   ::   ::   ::   ::  :::
+     :         :   : :   : :  :   : :: ::   ::    :   :     :   ::
+    `
+    console.log(chalk.red(logo));
     return await this.login(this.config.token);
   }
 }

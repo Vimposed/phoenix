@@ -33,6 +33,7 @@
     "dayjs": "^1.11.3",
     "discord.js": "^13.8.0",
     "node-cron": "^3.0.1",
-    "tsconfig-paths": "^4.0.0"
+    "tsconfig-paths": "^4.0.0",
+    "util": "^0.12.4"
   }
 }
