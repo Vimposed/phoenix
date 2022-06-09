@@ -16,6 +16,13 @@ export default class EvalCommand extends Command {
   }
   
   async run(client: Phoenix, msg: Message, args?: any): Promise<unknown> {
-    return msg.channel.send({ content: "Hello world" });
+    try {
+      let toEval = await eval(args[0]);
+      if (typeof toEval !== "string") toEval = require("util").inspect(toEval);
+      const clean = toEval.replaceAll(client.token, "[REDACTED]");
+      return msg.channel.send(`${clean}`);
+    } catch (err) {
+      return msg.channel.send(`${err}`);
+    }
   }
 }

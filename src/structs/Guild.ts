@@ -25,7 +25,7 @@ export class PhoenixGuild {
     if(has) return;
 
     prisma("prisma:createGuild", `Creating new guild with ID: ${guild.id}`);
-    await client.prisma.users.create({
+    await client.prisma.guild.create({
       data: {
         id: guild.id
       }
@@ -42,7 +42,7 @@ export class PhoenixGuild {
     if(!has) return;
 
     prisma("prisma:guildDelete", `Deleting entry for guild ID: ${guild.id}`);
-    await client.prisma.users.delete({
+    await client.prisma.guild.delete({
       where: {
         id: guild.id
       }
