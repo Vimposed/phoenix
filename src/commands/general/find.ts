@@ -3,7 +3,7 @@ import { Phoenix } from "@structs/Client";
 import { Command } from "@structs/Command";
 import { Message } from "discord.js";
 
-export default class FndCommand extends Command {
+export default class FindCommand extends Command {
   constructor(client: Phoenix) {
     super({
       client,
