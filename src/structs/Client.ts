@@ -3,12 +3,15 @@ require("dotenv").config();
 
 import { PrismaClient } from "@prisma/client";
 import { Client, Collection, Intents } from "discord.js";
-import { log, prisma as prismaLog, SlashCommand } from "@structs/index";
+import { log, prisma as prismaLog, SlashCommand } from "./index";
 
 import fs from "fs";
 import fsPromise from "fs/promises";
 import path from "path";
 import { Command } from "./Command";
+import { Webhook } from "@utils/webhook";
+import { User } from "./User";
+import { PhoenixGuild } from "./Guild";
 
 interface Config {
   owners: string | string[],
@@ -25,6 +28,9 @@ export class Phoenix extends Client {
   slashCommands: Collection<string, SlashCommand>;
   commands: Collection<string, Command>;
   events: Collection<string, Event>;
+  webhook: Webhook;
+  phoenixUser: User;
+  phoenixGuild: PhoenixGuild;
   constructor(config: Config) {
     super({
       intents: [Intents.FLAGS.GUILDS,
@@ -48,6 +54,9 @@ export class Phoenix extends Client {
     this.slashCommands = new Collection();
     this.commands = new Collection();
     this.events = new Collection();
+    this.webhook = new Webhook();
+    this.phoenixUser = new User();
+    this.phoenixGuild = new PhoenixGuild();
   }
 
   async loadCommands(dir: string): Promise<void> {
@@ -99,7 +108,6 @@ export class Phoenix extends Client {
       });
     });
   }
-
 
   async init() {
     return await this.login(this.config.token);
