@@ -17,7 +17,8 @@
     "baseUrl": "src",
     "paths": {
       "@structs/*": ["structs/*"],
-      "@types/*": ["@types/*"]
+      "@types/*": ["@types/*"],
+      "@utils/*": ["utils/*"]
     },
   },
   "exclude": ["node_modules"],
