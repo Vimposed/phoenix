@@ -2,7 +2,7 @@
   "name": "phoenix",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "author": "Kyle <k00benne@gmail.com>",
+  "author": "Vimposed <k00benne@gmail.com>",
   "license": "MIT",
   "repository": "git@github.com:vimposed/phoenix.git",
   "private": true,
