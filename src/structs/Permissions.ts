@@ -1,18 +1,19 @@
 import { Phoenix } from "./index";
-import { Message, Permissions } from "discord.js";
+import { BaseCommandInteraction, Message, Permissions } from "discord.js";
 
 interface PermType {
   name?: string;
+  command?: string;
   role?: string;
   perms?: string[];
-  inherit?: boolean;
+  parent?: string;
 }
 
 let values: any = {}
 values = Permissions.FLAGS;
 values = Object.keys(values);
 
-export async function createPermission(client: Phoenix, msg: Message, options: PermType) {
+export async function createPermission(client: Phoenix, msg: Message | BaseCommandInteraction, options: PermType) {
   let findRole;
   let perms;
 
@@ -20,19 +21,38 @@ export async function createPermission(client: Phoenix, msg: Message, options: P
     findRole = msg.guild!.roles.cache.find(x => x.name === options.role);
   }
   
-  if(typeof options.perms === "object" ? (options.perms as any).every((x: any) => values.includes(x)) : values.includes(options.perms)) {
+  if(typeof options.perms === "object" && options.perms !== undefined ? (options.perms as any).every((x: any) => values.includes(x)) : values.includes(options.perms)) {
     perms = options.perms;
-  } else {
-    return msg.channel.send({ content: `I was unable to find the ${typeof options.perms === "object" ? "permissions" : "permission"} provided.` });
+  }
+
+  const find = await client.prisma.customPerms.findFirst({
+    where: {
+      guildId: msg.guild!.id,
+      name: options.name
+    }
+  });
+
+  if(find) {
+    return await client.prisma.customPerms.create({
+      data: {
+        name: options.name!,
+        command: options.command!,
+        role: find.role,
+        perms: find.perms,
+        parent: find.name,
+        guildId: msg.guild!.id
+      }
+    });
   }
 
   await client.prisma.customPerms.create({
     data: {
       name: options.name!,
+      command: options.command!,
       role: findRole?.id || "",
       perms: perms || [],
-      inherit: options.inherit || false,
+      parent: options.parent! || "",
       guildId: msg.guild!.id
     }
-  })
+  });
 }

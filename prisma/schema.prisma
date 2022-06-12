@@ -24,9 +24,10 @@ model Users {
 model CustomPerms {
   id      String   @id @default(cuid())
   name    String
+  command String
   role    String?
   perms   String[]
-  inherit Boolean?
+  parent  String?
   guild   Guild?   @relation(fields: [guildId], references: [id])
   guildId String?
 }
