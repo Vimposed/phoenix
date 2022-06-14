@@ -11,7 +11,7 @@
     "prisma:gen": "npx prisma generate && npx prisma migrate dev",
     "prisma:seed": "ts-node prisma/seed.ts",
     "build": "tsc && tsc-alias",
-    "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
+    "dev": "ts-node-dev --exit-child -r tsconfig-paths/register src/index.ts",
     "start": "ts-node -r tsconfig-paths/register src/index.ts"
   },
   "devDependencies": {

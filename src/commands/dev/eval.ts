@@ -10,16 +10,16 @@ export default class EvalCommand extends Command {
       name: "eval",
       alias: [],
       description: "Execute javascript code from discord.",
-      defaultPermission: true,
-      userPermission: "DEV"
+      userPermission: "DEV",
     });
   }
-  
+
   async run(client: Phoenix, msg: Message, args?: any): Promise<unknown> {
     try {
-      let toEval = await eval(args[0]);
+      let toEval = await eval(args.join(" "));
       if (typeof toEval !== "string") toEval = require("util").inspect(toEval);
       const clean = toEval.replaceAll(client.token, "[REDACTED]");
+      console.log(clean);
       return msg.channel.send(`${clean}`);
     } catch (err) {
       return msg.channel.send(`${err}`);

@@ -7,6 +7,7 @@ exports.run = async function (client: Phoenix, msg: Message): Promise<void> {
 
   await client.phoenixUser.findUser(msg.member!);
   await client.phoenixGuild.findGuild(msg.guild!);
+  await client.settings.getSettings(msg.guild!);
 
   // await createPermission(client, msg, {
   //   name: "test",
@@ -14,12 +15,6 @@ exports.run = async function (client: Phoenix, msg: Message): Promise<void> {
   //   role: "Mods",
   //   perms: ["CHANGE_NICKNAME", "KICK_MEMBERS"]
   // });
-
-  await createPermission(client, msg, {
-    name: "testers",
-    command: "ping",
-    parent: "test"
-  });
 
   const command = msg.content.slice(client.config.prefix.length).toLowerCase().split(/\s+/)[0];
   const cmd = client.commands.get(command);

@@ -1,25 +1,25 @@
-
 require("dotenv").config();
 
 import { PrismaClient } from "@prisma/client";
 import { Client, Collection, Intents } from "discord.js";
-import { log, prisma as prismaLog, SlashCommand } from "./index";
+import { log, prisma as prismaLog, Settings, SlashCommand } from "./index";
 import chalk from "chalk";
 
 import fs from "fs";
 import fsPromise from "fs/promises";
 import path from "path";
 import { Command } from "./Command";
-import { Webhook } from "@utils/webhook";
+import { Webhook } from "@utils/index";
 import { User } from "./User";
 import { PhoenixGuild } from "./Guild";
+import { Automod } from "./Automod";
 
 // const logo = require("../utils/logo.txt");
 
 interface Config {
-  owners: string | string[],
-  prefix: string,
-  token: string
+  owners: string | string[];
+  prefix: string;
+  token: string;
 }
 
 export class Phoenix extends Client {
@@ -34,19 +34,22 @@ export class Phoenix extends Client {
   webhook: Webhook;
   phoenixUser: User;
   phoenixGuild: PhoenixGuild;
+  settings: Settings;
+  automod: Automod;
   constructor(config: Config) {
     super({
-      intents: [Intents.FLAGS.GUILDS,
-      Intents.FLAGS.GUILD_MEMBERS,
-      Intents.FLAGS.GUILD_INTEGRATIONS,
-      Intents.FLAGS.GUILD_MESSAGES,
-      Intents.FLAGS.GUILD_BANS,
-      Intents.FLAGS.GUILD_WEBHOOKS,
-      Intents.FLAGS.DIRECT_MESSAGES,
-      Intents.FLAGS.GUILD_INTEGRATIONS,
-      Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+      intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MEMBERS,
+        Intents.FLAGS.GUILD_INTEGRATIONS,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_BANS,
+        Intents.FLAGS.GUILD_WEBHOOKS,
+        Intents.FLAGS.DIRECT_MESSAGES,
+        Intents.FLAGS.GUILD_INTEGRATIONS,
+        Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
       ],
-      partials: ["CHANNEL", "USER", "GUILD_MEMBER"]
+      partials: ["CHANNEL", "USER", "GUILD_MEMBER"],
     });
 
     this.prisma = new PrismaClient();
@@ -60,6 +63,8 @@ export class Phoenix extends Client {
     this.webhook = new Webhook();
     this.phoenixUser = new User();
     this.phoenixGuild = new PhoenixGuild();
+    this.settings = new Settings(this);
+    this.automod = new Automod(this);
   }
 
   async loadCommands(dir: string): Promise<void> {
@@ -75,7 +80,11 @@ export class Phoenix extends Client {
         delete require.cache[require.resolve(path.join(dir, item))];
         const commandFile = require(path.join(dir, item));
         const command = new commandFile.default(this);
-        this.logger("info", "commands", `Loaded command: ${item.split('.')[0]}`);
+        this.logger(
+          "info",
+          "commands",
+          `Loaded command: ${item.split(".")[0]}`
+        );
         this.commands.set(command.name, command);
       }
     }
@@ -94,7 +103,11 @@ export class Phoenix extends Client {
         delete require.cache[require.resolve(path.join(dir, item))];
         const commandFile = require(path.join(dir, item));
         const command = new commandFile.default(this);
-        this.logger("info", "commands", `Loaded slash command: ${item.split('.')[0]}`);
+        this.logger(
+          "info",
+          "commands",
+          `Loaded slash command: ${item.split(".")[0]}`
+        );
         this.slashCommands.set(command.name, command);
       }
     }
@@ -103,9 +116,9 @@ export class Phoenix extends Client {
   async loadEvents(dir: string): Promise<void> {
     fs.readdir(`${dir}`, (err, files) => {
       if (err) return console.error(err);
-      files.forEach(file => {
+      files.forEach((file) => {
         let eventFunction = require(path.join(dir, file));
-        let eventName = file.split('.')[0];
+        let eventName = file.split(".")[0];
         this.logger("debug", "events", `Loaded event: ${eventName}`);
         this.on(eventName, (...args) => eventFunction.run(this, ...args));
       });
@@ -123,9 +136,8 @@ export class Phoenix extends Client {
     :!:       :!:  !:!  :!:  !:!  :!:       :!:  !:!  :!:  :!:  !:!
      ::       ::   :::  ::::: ::   :: ::::   ::   ::   ::   ::  :::
      :         :   : :   : :  :   : :: ::   ::    :   :     :   ::
-    `
+    `;
     console.log(chalk.red(logo));
     return await this.login(this.config.token);
   }
 }
-

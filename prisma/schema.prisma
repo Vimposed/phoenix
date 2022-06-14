@@ -12,6 +12,7 @@ model Guild {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   customPerms CustomPerms[]
+  settings    Settings[]
 }
 
 model Users {
@@ -32,8 +33,50 @@ model CustomPerms {
   guildId String?
 }
 
+model Settings {
+  id        String      @id @default(cuid())
+  guildId   String?
+  guild     Guild?      @relation(fields: [guildId], references: [id])
+  automod   Automod[]
+  responses Responses[]
+}
+
+model Automod {
+  id         String    @id @default(cuid())
+  settingsId String?
+  settings   Settings? @relation(fields: [settingsId], references: [id])
+
+  logChannel      String   @default("")
+  ignoredChannels String[]
+  ignoredRoles    String[]
+  enabled         Boolean  @default(false)
+  bannedWords     Json     @default("[]")
+  invites         Json     @default("[]")
+  massMentions    Json     @default("[]")
+  autoActionTime  Int      @default(600000)
+  violationCount  Int      @default(4)
+
+  muteChannel String @default("")
+  muteRole    String @default("")
+}
+
+model Responses {
+  id         String    @id @default(cuid())
+  settingsId String?
+  settings   Settings? @relation(fields: [settingsId], references: [id])
+
+  badWords     String @default("Please refrain from using the blacklisted word")
+  badLink      String @default("That link is not allowed.")
+  massMentions String @default("Please stop mass mentioning users.")
+}
+
 enum Role {
   NORMAL
   STAFF
   DEV
+}
+
+enum GuildType {
+  NORMAL
+  PREMIUM
 }

@@ -3,11 +3,11 @@ import { Phoenix } from "@structs/Client";
 import { Command } from "@structs/Command";
 import { Message } from "discord.js";
 
-export default class KickCommand extends Command {
+export default class MuteCommand extends Command {
   constructor(client: Phoenix) {
     super({
       client,
-      name: "kick",
+      name: "mute",
       alias: ["boot"],
       description:
         "Kicks a user with the reason specified (and logs it, if set)",
@@ -25,12 +25,11 @@ export default class KickCommand extends Command {
     }
 
     try {
-      await user.kick(reason);
-      return doneMsg.edit(
-        `Successfully kicked ${user!.user.tag} for ${reason}`
-      );
-    } catch (e) {
-      return doneMsg.edit(`An error occurred. Stack: ${e}`);
+      await client.automod.applyRole(user);
+      // await user.timeout(2419200000, reason);
+      return doneMsg.edit(`Successfully muted ${user!.user.tag} for ${reason}`);
+    } catch (e: any) {
+      return doneMsg.edit(`An error occurred. Stack: ${e.stack}`);
     }
   }
 }

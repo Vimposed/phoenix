@@ -10,7 +10,6 @@ export abstract class Command implements Commands {
   public name: string;
   public alias: string[];
   public description: string;
-  public defaultPermission: boolean;
   public userPermission?: Role;
   public permission?: PermissionString;
   public cooldown?: number;
@@ -19,7 +18,6 @@ export abstract class Command implements Commands {
     this.name = options.name;
     this.alias = options.alias;
     this.description = options.description;
-    this.defaultPermission = options.defaultPermission;
     this.userPermission = options.userPermission;
     this.permission = options.permission;
     this.cooldown = options.cooldown;

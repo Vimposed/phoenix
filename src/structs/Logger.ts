@@ -5,7 +5,12 @@ interface Options {
   timestamp?: boolean;
 }
 
-export async function log(level: string, title: string, msg: string, options?: Options) {
+export async function log(
+  level: string,
+  title: string,
+  msg: string,
+  options?: Options
+) {
   let timestamp;
 
   if (level === undefined) {
@@ -26,28 +31,40 @@ export async function log(level: string, title: string, msg: string, options?: O
 
   switch (level) {
     case "info": {
-      console.log(chalk.green(`${timestamp ? `[${timestamp}]:` : ""} ${title} | ${msg}`));
+      console.log(
+        chalk.green(`${timestamp ? `[${timestamp}]:` : ""} ${title} | ${msg}`)
+      );
       break;
     }
     case "warn": {
-      console.log(chalk.yellow(`${timestamp ? `[${timestamp}]:` : ""} ${title} | ${msg}`));
+      console.log(
+        chalk.yellow(`${timestamp ? `[${timestamp}]:` : ""} ${title} | ${msg}`)
+      );
       break;
     }
     case "error": {
-      console.log(chalk.red(`${timestamp ? `[${timestamp}]:` : ""} ${title} | ${msg}`));
+      console.log(
+        chalk.red(`${timestamp ? `[${timestamp}]:` : ""} ${title} | ${msg}`)
+      );
       break;
     }
     case "debug": {
-      console.log(chalk.cyan(`${timestamp ? `[${timestamp}]:` : ""} ${title} | ${msg}`));
+      console.log(
+        chalk.cyan(`${timestamp ? `[${timestamp}]:` : ""} ${title} | ${msg}`)
+      );
       break;
     }
     case "prisma": {
-      console.log(chalk.magenta(`${timestamp ? `[${timestamp}]:` : ""} ${title} | ${msg}`));
+      console.log(
+        chalk.magenta(`${timestamp ? `[${timestamp}]:` : ""} ${title} | ${msg}`)
+      );
       break;
     }
   }
 }
 
 export async function prisma(title: string, msg: string, timestamp?: boolean) {
-  return log("prisma", title, msg, { timestamp: timestamp ? timestamp : false });
+  return log("prisma", title, msg, {
+    timestamp: timestamp ? timestamp : false,
+  });
 }
